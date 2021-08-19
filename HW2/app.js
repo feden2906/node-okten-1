@@ -27,13 +27,15 @@ app.get('/registration', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-
+//  треба спинити цикл
     users.forEach(user => {
+        // Поставила ! щоб спрацював код, поки не пофікшу траблу з push
         if (user.email === req.body.email) {
-            users.push(req.body); // не працює
-            console.log(req.body);
-            res.render('login');
+           res.status(409).end('User with such mail exists')
         }
+        users.push(req.body); // не працює
+        console.log(req.body);
+        res.render('login');
     })
 })
 
