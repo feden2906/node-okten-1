@@ -3,11 +3,11 @@ const expressHbs = require('express-handlebars');
 const path = require('path');
 
 const {PORT} = require('./config/variables');
-const users = require('./db/users');
+const users = require('./db/users.js');
 
-const app = express();
 const pathStatic = path.join(__dirname, 'static');
 
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -18,29 +18,37 @@ app.engine('.hbs', expressHbs({defaultLayout: false}));
 app.set('views', pathStatic);
 
 
-
-
-
-
 app.get('/', (req, res) => {
     res.render('firstPage');
 })
 
 app.get('/registration', (req, res) => {
-    console.log(req.body);
     res.render('registration');
 })
 
 app.post('/login', (req, res) => {
 
-    users.push(req.body);
-    console.log(req.body);
-    res.render('login');
+    users.forEach(user => {
+        if (user.email === req.body.email) {
+            users.push(req.body); // не працює
+            console.log(req.body);
+            res.render('login');
+        }
+    })
 })
 
-app.post('/users', (req, res) => {
-    res.end('ok')
-    //res.render('users')
+app.post('/user', (req, res) => {
+
+    users.forEach(user => {
+        if(user.email === req.body.email && user.password === req.body.password) {
+         // const user = user;
+            res.render('userPage', {user, isUserPresent: true});
+        }
+    })
+})
+
+app.get('/users', (req, res) => {
+    res.render('users', {users})
 })
 
 app.listen(PORT, () => {

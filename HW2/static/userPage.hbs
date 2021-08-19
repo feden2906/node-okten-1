@@ -9,16 +9,14 @@
 </head>
 <body>
 
-
-<h1>hello</h1>
-{{#each users}}
-    <div>{{this.firstName}}</div>
-    <div>{{this.lastName}}</div>
-    <div>{{this.age}}</div>
-    <div>{{this.email}}</div>
-    <hr>
-{{/each}}
-
+{{#if isUserPresent }}
+    <div>{{user.firstName}}</div>
+    <div>{{user.lastName}}</div>
+    <div>{{user.age}}</div>
+    <div>{{user.email}}</div>
+{{/if}}
+<div>hello</div>
+<button><a href="/users" >show users</a></button>
 
 </body>
 </html>
