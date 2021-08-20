@@ -9,13 +9,14 @@
 </head>
 <body>
 
+
 {{#if isUserPresent }}
-    <div>{{user.firstName}}</div>
-    <div>{{user.lastName}}</div>
-    <div>{{user.age}}</div>
-    <div>{{user.email}}</div>
+    <div>Hello {{user.firstName}} {{user.lastName}}</div>
+    <div>Info:</div>
+    <div>age - {{user.age}}</div>
+    <div>email: {{user.email}}</div>
 {{/if}}
-<div>hello</div>
+
 <button><a href="/users" >show users</a></button>
 
 </body>

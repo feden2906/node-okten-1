@@ -27,23 +27,27 @@ app.get('/registration', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-//  треба спинити цикл
-    users.forEach(user => {
-        // Поставила ! щоб спрацював код, поки не пофікшу траблу з push
+
+    const userExist = users.some(user => {
         if (user.email === req.body.email) {
-           res.status(409).end('User with such mail exists')
+            return true
         }
-        users.push(req.body); // не працює
-        console.log(req.body);
+    });
+
+    if (userExist) {
+        res.status(409).end('User with such mail exists');
+    }
+
+    if (!userExist) {
+        users.push(req.body);
         res.render('login');
-    })
-})
+    }
+});
 
 app.post('/user', (req, res) => {
 
     users.forEach(user => {
-        if(user.email === req.body.email && user.password === req.body.password) {
-         // const user = user;
+        if (user.email === req.body.email && user.password === req.body.password) {
             res.render('userPage', {user, isUserPresent: true});
         }
     })

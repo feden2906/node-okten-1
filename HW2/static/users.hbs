@@ -9,16 +9,12 @@
 </head>
 <body>
 
-
-<h1>hello</h1>
 {{#each users}}
-    <div>{{this.firstName}}</div>
-    <div>{{this.lastName}}</div>
-    <div>{{this.age}}</div>
-    <div>{{this.email}}</div>
+    <div>{{this.firstName}} {{this.lastName}}</div>
+    <div>age - {{this.age}}</div>
+    <div>email - {{this.email}}</div>
     <hr>
 {{/each}}
-
 
 </body>
 </html>
