@@ -9,15 +9,12 @@
 </head>
 <body>
 
+<div>Hello {{user.firstName}} {{user.lastName}}</div>
+<div>Info:</div>
+<div>age - {{user.age}}</div>
+<div>email: {{user.email}}</div>
 
-{{#if isUserPresent }}
-    <div>Hello {{user.firstName}} {{user.lastName}}</div>
-    <div>Info:</div>
-    <div>age - {{user.age}}</div>
-    <div>email: {{user.email}}</div>
-{{/if}}
-
-<button><a href="/users" >show users</a></button>
+<button><a href="/users">show users</a></button>
 
 </body>
 </html>

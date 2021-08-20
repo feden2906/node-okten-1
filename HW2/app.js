@@ -17,7 +17,6 @@ app.set('view engine', '.hbs');
 app.engine('.hbs', expressHbs({defaultLayout: false}));
 app.set('views', pathStatic);
 
-
 app.get('/', (req, res) => {
     res.render('firstPage');
 })
@@ -27,43 +26,36 @@ app.get('/registration', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-
-    const userExist = users.some(user => {
-        if (user.email === req.body.email) {
-            return true
-        }
-    });
+    const userExist = users.some(user => user.email === req.body.email);
 
     if (userExist) {
         res.status(409).end('User with such mail exists');
     }
 
-    if (!userExist) {
-        users.push(req.body);
-        res.render('login');
-    }
+    users.push(req.body);
+    res.render('login');
+
+    // if (!userExist) {
+    //     users.push(req.body);
+    //     res.render('login');
+    // }
 });
 
-app.post('/user', (req, res) => {
+app.post('/users/:user_id', (req, res) => {
+    // const isUserPresent = users.some(user => {
+    //     if (user.email === req.body.email && user.password === req.body.password) {
+    //         return true
+    //     }
+    // });
 
-    const isUserPresent = users.some(user => {
-        if (user.email === req.body.email && user.password === req.body.password) {
-            return true
-        }
-    });
-    const user = users.find(user => {
-        if (user.email === req.body.email && user.password === req.body.password) {
-            return true
-        }
-    });
+    const user = users.find(user => user.email === req.body.email && user.password === req.body.password);
 
-    if (isUserPresent) {
-        res.render('userPage', {user, isUserPresent});
-    }
-
-    if (!isUserPresent) {
+    if (!user) {
         res.status(404).end('User Not Found');
+        return;
     }
+
+    res.render('userPage', {user});
 });
 
 app.get('/users', (req, res) => {
