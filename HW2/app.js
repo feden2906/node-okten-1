@@ -30,24 +30,14 @@ app.post('/login', (req, res) => {
 
     if (userExist) {
         res.status(409).end('User with such mail exists');
+        return;
     }
 
     users.push(req.body);
     res.render('login');
-
-    // if (!userExist) {
-    //     users.push(req.body);
-    //     res.render('login');
-    // }
 });
 
 app.post('/users/:user_id', (req, res) => {
-    // const isUserPresent = users.some(user => {
-    //     if (user.email === req.body.email && user.password === req.body.password) {
-    //         return true
-    //     }
-    // });
-
     const user = users.find(user => user.email === req.body.email && user.password === req.body.password);
 
     if (!user) {
