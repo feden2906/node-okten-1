@@ -46,16 +46,29 @@ app.post('/login', (req, res) => {
 
 app.post('/user', (req, res) => {
 
-    users.forEach(user => {
+    const isUserPresent = users.some(user => {
         if (user.email === req.body.email && user.password === req.body.password) {
-            res.render('userPage', {user, isUserPresent: true});
+            return true
         }
-    })
-})
+    });
+    const user = users.find(user => {
+        if (user.email === req.body.email && user.password === req.body.password) {
+            return true
+        }
+    });
+
+    if (isUserPresent) {
+        res.render('userPage', {user, isUserPresent});
+    }
+
+    if (!isUserPresent) {
+        res.status(404).end('User Not Found');
+    }
+});
 
 app.get('/users', (req, res) => {
-    res.render('users', {users})
-})
+    res.render('users', {users});
+});
 
 app.listen(PORT, () => {
     console.log('App listen', PORT);
