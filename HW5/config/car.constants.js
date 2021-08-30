@@ -1,4 +1,4 @@
 module.exports = {
-    MIN_YEAR: new Date().getFullYear() - 80,
+    MIN_YEAR: 1940,
     MAX_YEAR: new Date().getFullYear()
 };

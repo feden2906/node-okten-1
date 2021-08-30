@@ -9,6 +9,8 @@ const createCarValidator = Joi.object({
 });
 
 const updateCarValidator = Joi.object({
+    model: Joi.string().min(2).max(30).trim(),
+    year: Joi.number().min(MIN_YEAR).max(MAX_YEAR),
     price: Joi.number()
 });
 
