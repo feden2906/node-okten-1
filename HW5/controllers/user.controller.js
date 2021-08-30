@@ -38,5 +38,29 @@ module.exports = {
         } catch (e) {
             next(e);
         }
+    },
+
+    deleteUser: async (req, res, next) => {
+        try {
+            const { user_id } = req.params;
+            await User.deleteOne({ _id: user_id });
+
+            res.status(statusCode.DELETED).json(`User with id ${user_id} is deleted`);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    updateUser: async (req, res, next) => {
+        try {
+            const { user_id } = req.params;
+            const updatedUser = await User.findByIdAndUpdate(user_id, req.body);
+
+            const userToNorm = userNormalizator(updatedUser);
+
+            res.json(userToNorm);
+        } catch (e) {
+            next(e);
+        }
     }
 };

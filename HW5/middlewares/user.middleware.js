@@ -9,8 +9,9 @@ module.exports = {
             const { error } = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(400, error.details[0].message);
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
             }
+            next();
         } catch (e) {
             next(e);
         }
@@ -37,12 +38,25 @@ module.exports = {
         try {
             const { email } = req.body;
 
-            const userByEmail = await User.findOne(email);
+            const userByEmail = await User.findOne({ email });
 
             if (userByEmail) {
                 throw new ErrorHandler(statusCodes.CONFLICT, errorMessage.EXIST_EMAIL);
             }
 
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    validateUpdateUser: (req, res, next) => {
+        try {
+            const { error } = userValidator.updateUser.validate(req.body);
+
+            if (error) {
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+            }
             next();
         } catch (e) {
             next(e);
