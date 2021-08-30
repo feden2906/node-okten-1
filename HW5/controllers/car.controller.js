@@ -48,7 +48,7 @@ module.exports = {
             const { car_id } = req.params;
             const updatedCar = await Car.findByIdAndUpdate(car_id, req.body);
 
-            res.json(updatedCar);
+            res.status(statusCodes.CREATED).json(updatedCar);
         } catch (e) {
             next(e);
         }
