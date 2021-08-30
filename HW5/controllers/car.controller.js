@@ -1,5 +1,5 @@
 const { Car } = require('../dataBase');
-const { statusCode } = require('../config');
+const { statusCodes } = require('../config');
 
 module.exports = {
     getSingleCar: (req, res, next) => {
@@ -26,7 +26,7 @@ module.exports = {
         try {
             const createdCar = await Car.create(req.body);
 
-            res.status(statusCode.CREATED).json(createdCar);
+            res.status(statusCodes.CREATED).json(createdCar);
         } catch (e) {
             next(e);
         }
@@ -37,7 +37,7 @@ module.exports = {
             const { car_id } = req.params;
             await Car.deleteOne({ _id: car_id });
 
-            res.status(statusCode.DELETED).json(`Car with id ${car_id} is deleted`);
+            res.status(statusCodes.DELETED).json(`Car with id ${car_id} is deleted`);
         } catch (e) {
             next(e);
         }
