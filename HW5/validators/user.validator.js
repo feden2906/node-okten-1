@@ -12,7 +12,7 @@ const createUserValidator = Joi.object({
     car: Joi.boolean()
 });
 
-const updateUser = Joi.object({
+const updateUserValidator = Joi.object({
     name: Joi.string().trim().alphanum().min(2)
         .max(30),
     email: Joi.string().regex(userConstants.EMAIL_REGEXP)
@@ -20,5 +20,5 @@ const updateUser = Joi.object({
 
 module.exports = {
     createUserValidator,
-    updateUser
+    updateUserValidator
 };
