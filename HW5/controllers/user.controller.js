@@ -58,7 +58,7 @@ module.exports = {
 
             const userToNorm = userNormalizator(updatedUser);
 
-            res.json(userToNorm);
+            res.status(statusCode.CREATED).json(userToNorm);
         } catch (e) {
             next(e);
         }
