@@ -52,7 +52,7 @@ module.exports = {
 
     validateUpdateUser: (req, res, next) => {
         try {
-            const { error } = userValidator.updateUser.validate(req.body);
+            const { error } = userValidator.updateUserValidator.validate(req.body);
 
             if (error) {
                 throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
