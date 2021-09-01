@@ -6,7 +6,7 @@ const {
     dbField,
     paramName,
     searchIn,
-    userRolesEnum
+    userRolesEnum, validatorsName
 } = require('../config');
 
 router.get(
@@ -15,7 +15,7 @@ router.get(
 );
 router.post(
     '/',
-    userMiddleware.validateUserBody,
+    userMiddleware.validateUserDinamic(validatorsName.user.createUser),
     userMiddleware.checkUniqueEmail,
     userController.createUser
 );
@@ -35,7 +35,7 @@ router.put(
     '/:user_id',
     userMiddleware.isUserPresentByDynmicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
     userMiddleware.checkUniqueEmail,
-    userMiddleware.validateUpdateUser,
+    userMiddleware.validateUserDinamic(validatorsName.user.updateUser),
     userController.updateUser
 );
 

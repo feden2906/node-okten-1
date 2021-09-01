@@ -1,23 +1,9 @@
 const { passwordService } = require('../service');
-const { userValidator } = require('../validators');
 const { ErrorHandler } = require('../errors');
 const { statusCodes, errorMessage } = require('../config');
 const { User } = require('../dataBase');
 
 module.exports = {
-    validateLoginUser: (req, res, next) => {
-        try {
-            const { error } = userValidator.loginUserValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, errorMessage.WRONG_EMAIL_OR_PASSWORD);
-            }
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
     isEmailExist: async (req, res, next) => {
         try {
             const { email } = req.body;

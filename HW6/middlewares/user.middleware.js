@@ -1,22 +1,9 @@
 const { User } = require('../dataBase');
 const { ErrorHandler } = require('../errors');
-const { userValidator } = require('../validators');
 const { errorMessage, statusCodes } = require('../config');
+const { userValidator } = require('../validators');
 
 module.exports = {
-    validateUserBody: (req, res, next) => {
-        try {
-            const { error } = userValidator.createUserValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
-            }
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
     isUserPresentByDynmicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
         try {
             const value = req[searchIn][paramName];
@@ -49,9 +36,9 @@ module.exports = {
         }
     },
 
-    validateUpdateUser: (req, res, next) => {
+    validateUserDinamic: (validatorsName, searchIn = 'body') => (req, res, next) => {
         try {
-            const { error } = userValidator.updateUserValidator.validate(req.body);
+            const { error } = userValidator[validatorsName].validate(req[searchIn]);
 
             if (error) {
                 throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
