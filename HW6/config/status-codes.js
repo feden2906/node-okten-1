@@ -4,5 +4,6 @@ module.exports = {
     CREATED: 201,
     DELETED: 204,
     INTERNAL_SERVER_ERROR: 500,
-    NOT_FOUND: 404
+    NOT_FOUND: 404,
+    FORBIDDEN: 403
 };
