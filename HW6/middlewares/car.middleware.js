@@ -10,7 +10,7 @@ module.exports = {
     //         const { error } = carValidator.createCarValidator.validate(req.body);
     //
     //         if (error) {
-    //             throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+    //             throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
     //         }
     //         next();
     //     } catch (e) {
@@ -39,7 +39,7 @@ module.exports = {
     //         const { error } = carValidator.updateCarValidator.validate(req.body);
     //
     //         if (error) {
-    //             throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+    //             throw new ErrorHandler.(statusCodes.BAD_REQUEST, error.details[0].message);
     //         }
     //         next();
     //     } catch (e) {
