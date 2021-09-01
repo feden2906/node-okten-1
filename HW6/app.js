@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const { errorMessage, statusCodes, variables: { MONGOOSE_CONNECT, PORT } } = require('./config');
-const { userRouter, carRouter, authRouter } = require('./routes');
+require('dotenv').config();
+
+const { errorMessage, statusCodes, variables: { DB_CONNECTION_URL, PORT } } = require('./config');
+const { authRouter, carRouter, userRouter } = require('./routes');
 
 const app = express();
 
-mongoose.connect(MONGOOSE_CONNECT);
+mongoose.connect(DB_CONNECTION_URL);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +22,7 @@ app.use('*', _notFoundError);
 app.use(_mainErrorHandler);
 
 app.listen(PORT, () => {
+    // console.log(process.env);
     console.log('App listen', PORT);
 });
 
