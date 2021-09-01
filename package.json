@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "start": "pm2 kill && pm2 start HW6/app.js && pm2 monit"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +24,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "husky": "4.3.0",
-    "lint-staged": "^11.1.2"
+    "lint-staged": "^11.1.2",
+    "nodemon": "^2.0.12"
   },
   "husky": {
     "hooks": {

@@ -1,7 +1,7 @@
 const { Car } = require('../dataBase');
 const ErrorHandler = require('../errors/ErrorHandler');
 
-const { errorMessage, statusCode, statusCodes } = require('../config');
+const { errorMessage, statusCodes } = require('../config');
 const { carValidator } = require('../validators');
 
 module.exports = {
@@ -18,17 +18,16 @@ module.exports = {
         }
     },
 
-    isCarPresent: async (req, res, next) => {
+    isCarPresentByDynmicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
         try {
-            const { car_id } = req.params;
-            const car = await Car.findById(car_id);
+            const value = req[searchIn][paramName];
+            const car = await Car.findOne({ [dbField]: value });
 
             if (!car) {
-                throw new ErrorHandler(statusCode.NOT_FOUND, errorMessage.NOT_FOUND);
+                throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessage.NOT_FOUND);
             }
 
             req.car = car;
-
             next();
         } catch (e) {
             next(e);

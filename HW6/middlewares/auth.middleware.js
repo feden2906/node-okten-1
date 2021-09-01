@@ -1,4 +1,4 @@
-const passwordService = require('../service/password.service');
+const { passwordService } = require('../service');
 const { userValidator } = require('../validators');
 const ErrorHandler = require('../errors/ErrorHandler');
 const { statusCodes, errorMessage } = require('../config');
