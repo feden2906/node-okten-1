@@ -9,7 +9,7 @@ module.exports = {
             const { error } = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
             }
             next();
         } catch (e) {
@@ -23,7 +23,7 @@ module.exports = {
             const user = await User.findOne({ [dbField]: value });
 
             if (!user) {
-                throw new ErrorHandler.ErrorHandler(statusCodes.NOT_FOUND, errorMessage.NOT_FOUND);
+                throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessage.NOT_FOUND);
             }
 
             req.user = user;
@@ -40,7 +40,7 @@ module.exports = {
             const userByEmail = await User.findOne({ email });
 
             if (userByEmail) {
-                throw new ErrorHandler.ErrorHandler(statusCodes.CONFLICT, errorMessage.EXIST_EMAIL);
+                throw new ErrorHandler(statusCodes.CONFLICT, errorMessage.EXIST_EMAIL);
             }
 
             next();
@@ -54,7 +54,7 @@ module.exports = {
             const { error } = userValidator.updateUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
             }
             next();
         } catch (e) {
@@ -71,7 +71,7 @@ module.exports = {
             }
 
             if (!rolesArr.includes(role)) {
-                throw new ErrorHandler.ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
+                throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
             }
 
             next();
