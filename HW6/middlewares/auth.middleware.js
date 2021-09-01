@@ -1,6 +1,6 @@
 const { passwordService } = require('../service');
 const { userValidator } = require('../validators');
-const ErrorHandler = require('../errors/ErrorHandler');
+const { ErrorHandler } = require('../errors');
 const { statusCodes, errorMessage } = require('../config');
 const { User } = require('../dataBase');
 
@@ -10,7 +10,7 @@ module.exports = {
             const { error } = userValidator.loginUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(statusCodes.BAD_REQUEST, errorMessage.WRONG_EMAIL_OR_PASSWORD);
+                throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, errorMessage.WRONG_EMAIL_OR_PASSWORD);
             }
             next();
         } catch (e) {
@@ -39,7 +39,7 @@ module.exports = {
             const { user } = req;
             const { password } = req.body;
 
-            await passwordService.compare(user.password, password);
+            await passwordService.compare(password, user.password);
 
             next();
         } catch (e) {

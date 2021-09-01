@@ -1,22 +1,22 @@
 const { Car } = require('../dataBase');
-const ErrorHandler = require('../errors/ErrorHandler');
+const { ErrorHandler } = require('../errors');
 
 const { errorMessage, statusCodes } = require('../config');
 const { carValidator } = require('../validators');
 
 module.exports = {
-    validateCarBody: (req, res, next) => {
-        try {
-            const { error } = carValidator.createCarValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
-            }
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
+    // validateCarBody: (req, res, next) => {
+    //     try {
+    //         const { error } = carValidator.createCarValidator.validate(req.body);
+    //
+    //         if (error) {
+    //             throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+    //         }
+    //         next();
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // },
 
     isCarPresentByDynmicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
         try {
@@ -34,9 +34,22 @@ module.exports = {
         }
     },
 
-    validateUpdateCar: (req, res, next) => {
+    // validateUpdateCar: (req, res, next) => {
+    //     try {
+    //         const { error } = carValidator.updateCarValidator.validate(req.body);
+    //
+    //         if (error) {
+    //             throw new ErrorHandler.ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+    //         }
+    //         next();
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // },
+
+    validateCarDinamic: (validatorName, searchIn = 'body') => (req, res, next) => {
         try {
-            const { error } = carValidator.updateCarValidator.validate(req.body);
+            const { error } = carValidator[validatorName].validate(req[searchIn]);
 
             if (error) {
                 throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
