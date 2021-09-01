@@ -1,12 +1,12 @@
 const { User } = require('../dataBase');
-const { userNormalizator } = require('../utils/user.normalizator');
+const { userNormalizator } = require('../utils');
 const { passwordService } = require('../service');
 const statusCode = require('../config/status-codes');
 
 module.exports = {
     getSingleUser: (req, res, next) => {
         try {
-            const userToNorm = userNormalizator(req.user);
+            const userToNorm = userNormalizator.userNormalizator(req.user);
 
             res.json(userToNorm);
         } catch (e) {
@@ -17,7 +17,7 @@ module.exports = {
     getAllUsers: async (req, res, next) => {
         try {
             const users = await User.find();
-            const usersToNorm = users.map((user) => userNormalizator(user));
+            const usersToNorm = users.map((user) => userNormalizator.userNormalizator(user));
 
             res.json(usersToNorm);
         } catch (e) {
@@ -32,7 +32,7 @@ module.exports = {
             const hashedPassword = await passwordService.hashPassword(password);
             const createdUser = await User.create({ ...req.body, password: hashedPassword });
 
-            const userToNorm = userNormalizator(createdUser);
+            const userToNorm = userNormalizator.userNormalizator(createdUser);
 
             res.status(statusCode.CREATED).json(userToNorm);
         } catch (e) {
@@ -56,7 +56,7 @@ module.exports = {
             const { user_id } = req.params;
             const updatedUser = await User.findByIdAndUpdate(user_id, req.body);
 
-            const userToNorm = userNormalizator(updatedUser);
+            const userToNorm = userNormalizator.userNormalizator(updatedUser);
 
             res.status(statusCode.CREATED).json(userToNorm);
         } catch (e) {

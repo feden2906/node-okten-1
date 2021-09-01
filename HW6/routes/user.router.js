@@ -2,6 +2,12 @@ const router = require('express').Router();
 
 const { userController } = require('../controllers');
 const { userMiddleware } = require('../middlewares');
+const {
+    dbField,
+    paramName,
+    searchIn,
+    userRolesEnum
+} = require('../config');
 
 router.get(
     '/',
@@ -16,19 +22,20 @@ router.post(
 
 router.get(
     '/:user_id',
-    userMiddleware.isUserPresentByDynmicParam('user_id', 'params', '_id'),
+    userMiddleware.isUserPresentByDynmicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
     userController.getSingleUser
 );
 router.delete(
     '/:user_id',
-    userMiddleware.isUserPresentByDynmicParam('user_id', 'params', '_id'),
-    userMiddleware.checkUserRoleMdlwr(['admin']),
+    userMiddleware.isUserPresentByDynmicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
+    userMiddleware.checkUserRoleMdlwr([userRolesEnum.ADMIN]),
     userController.deleteUser
 );
 router.put(
     '/:user_id',
-    userMiddleware.isUserPresentByDynmicParam('user_id', 'params', '_id'),
+    userMiddleware.isUserPresentByDynmicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
     userMiddleware.checkUniqueEmail,
+    userMiddleware.validateUpdateUser,
     userController.updateUser
 );
 
