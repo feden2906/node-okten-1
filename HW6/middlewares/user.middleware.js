@@ -41,7 +41,7 @@ module.exports = {
             const { error } = userValidator[validatorsName].validate(req[searchIn]);
 
             if (error) {
-                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, errorMessage.WRONG_EMAIL_OR_PASSWORD);
             }
             next();
         } catch (e) {
