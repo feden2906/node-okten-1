@@ -1,5 +1,6 @@
 module.exports = {
     carConstants: require('./car.constants'),
+    dbTablesEnum: require('./db-tables.enum'),
     dbField: require('./dbField'),
     errorMessage: require('./error-message'),
     paramName: require('./paramName'),
