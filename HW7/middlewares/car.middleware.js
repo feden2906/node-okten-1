@@ -5,7 +5,7 @@ const { errorMessage, statusCodes } = require('../config');
 const { carValidator } = require('../validators');
 
 module.exports = {
-    isCarPresentByDynmicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
+    isCarPresentByDynamicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
         try {
             const value = req[searchIn][paramName];
             const car = await Car.findOne({ [dbField]: value });

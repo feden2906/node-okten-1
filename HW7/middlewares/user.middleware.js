@@ -4,14 +4,10 @@ const { errorMessage, statusCodes } = require('../config');
 const { userValidator } = require('../validators');
 
 module.exports = {
-    isUserPresentByDynmicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
+    getUserByDynamicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
         try {
             const value = req[searchIn][paramName];
             const user = await User.findOne({ [dbField]: value });
-
-            if (!user) {
-                throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessage.NOT_FOUND);
-            }
 
             req.user = user;
             next();
@@ -20,14 +16,13 @@ module.exports = {
         }
     },
 
-    checkUniqueEmail: async (req, res, next) => {
+    throwIfUserNotPresent: (req, res, next) => {
         try {
-            const { email } = req.body;
+            const { user } = req;
 
-            const userByEmail = await User.findOne({ email });
-
-            if (userByEmail) {
-                throw new ErrorHandler(statusCodes.CONFLICT, errorMessage.EXIST_EMAIL);
+            if (!user) {
+                throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessage.NOT_FOUND);
+                //  throw new Error('not found')
             }
 
             next();
@@ -35,6 +30,36 @@ module.exports = {
             next(e);
         }
     },
+
+    throwIfUserPresent: (req, res, next) => {
+        try {
+            const { user } = req;
+
+            if (user) {
+                throw new ErrorHandler(statusCodes.CONFLICT, errorMessage.USER_EXIST);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    // checkUniqueEmail: async (req, res, next) => {
+    //     try {
+    //         const { email } = req.body;
+    //
+    //         const userByEmail = await User.findOne({ email });
+    //
+    //         if (userByEmail) {
+    //             throw new ErrorHandler(statusCodes.CONFLICT, errorMessage.EXIST_EMAIL);
+    //         }
+    //
+    //         next();
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // },
 
     validateUserDinamic: (validatorsName, searchIn = 'body') => (req, res, next) => {
         try {
