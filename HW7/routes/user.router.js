@@ -16,25 +16,30 @@ router.get(
 router.post(
     '/',
     userMiddleware.validateUserDinamic(validatorsName.user.createUser),
-    userMiddleware.checkUniqueEmail,
+    userMiddleware.getUserByDynamicParam(paramName.user.EMAIL),
+    userMiddleware.throwIfUserPresent,
+    // userMiddleware.checkUniqueEmail,
     userController.createUser
 );
 
 router.get(
     '/:user_id',
-    userMiddleware.isUserPresentByDynmicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
+    userMiddleware.getUserByDynamicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
+    userMiddleware.throwIfUserNotPresent,
     userController.getSingleUser
 );
 router.delete(
     '/:user_id',
-    userMiddleware.isUserPresentByDynmicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
+    userMiddleware.getUserByDynamicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
+    userMiddleware.throwIfUserNotPresent,
     userMiddleware.checkUserRoleMdlwr([userRolesEnum.ADMIN]),
     userController.deleteUser
 );
 router.put(
     '/:user_id',
-    userMiddleware.isUserPresentByDynmicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
-    userMiddleware.checkUniqueEmail,
+    userMiddleware.getUserByDynamicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
+    userMiddleware.throwIfUserNotPresent,
+    // userMiddleware.checkUniqueEmail,
     userMiddleware.validateUserDinamic(validatorsName.user.updateUser),
     userController.updateUser
 );

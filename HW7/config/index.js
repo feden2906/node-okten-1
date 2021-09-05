@@ -5,6 +5,7 @@ module.exports = {
     errorMessage: require('./error-message'),
     paramName: require('./paramName'),
     searchIn: require('./searchIn'),
+    secretKeys: require('./secretKeys'),
     statusCodes: require('./status-codes'),
     userConstants: require('./user.constatns'),
     userRolesEnum: require('./user.roles.enum'),

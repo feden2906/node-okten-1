@@ -20,18 +20,18 @@ router.post(
 );
 router.get(
     '/:car_id',
-    carMiddleware.isCarPresentByDynmicParam(paramName.car.CAR_ID, searchIn.PARAMS, dbField._ID),
+    carMiddleware.isCarPresentByDynamicParam(paramName.car.CAR_ID, searchIn.PARAMS, dbField._ID),
     carController.getSingleCar
 );
 router.delete(
     '/:car_id',
-    carMiddleware.isCarPresentByDynmicParam(paramName.car.CAR_ID, searchIn.PARAMS, dbField._ID),
+    carMiddleware.isCarPresentByDynamicParam(paramName.car.CAR_ID, searchIn.PARAMS, dbField._ID),
     carController.deleteCar
 );
 router.put(
     '/:car_id',
     carMiddleware.validateCarDinamic(validatorsName.car.updateCar, searchIn.BODY),
-    carMiddleware.isCarPresentByDynmicParam(paramName.car.CAR_ID, searchIn.PARAMS, dbField._ID),
+    carMiddleware.isCarPresentByDynamicParam(paramName.car.CAR_ID, searchIn.PARAMS, dbField._ID),
     carController.updateCar
 );
 
