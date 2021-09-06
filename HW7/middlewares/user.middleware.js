@@ -10,6 +10,8 @@ module.exports = {
             const user = await User.findOne({ [dbField]: value });
 
             req.user = user;
+
+            console.log(req.user);
             next();
         } catch (e) {
             next(e);
@@ -22,7 +24,6 @@ module.exports = {
 
             if (!user) {
                 throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessage.NOT_FOUND);
-                //  throw new Error('not found')
             }
 
             next();
@@ -45,14 +46,46 @@ module.exports = {
         }
     },
 
-    // checkUniqueEmail: async (req, res, next) => {
+    validateUserDinamic: (validatorsName, searchIn = 'body') => (req, res, next) => {
+        try {
+            const { error } = userValidator[validatorsName].validate(req[searchIn]);
+
+            if (error) {
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+            }
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkUserRoleAndID: (rolesArr = []) => (req, res, next) => {
+        try {
+            const { loginUser, user } = req;
+
+            if (!rolesArr.length) {
+                return next();
+            }
+
+            if (!rolesArr.includes(loginUser.role)) {
+                throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
+            }
+
+            if (loginUser._id.toString() === user._id.toString()) {
+                return next();
+            }
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    // checkUser: (req, res, next) => {
     //     try {
-    //         const { email } = req.body;
+    //         const { loginUser, user } = req;
     //
-    //         const userByEmail = await User.findOne({ email });
-    //
-    //         if (userByEmail) {
-    //             throw new ErrorHandler(statusCodes.CONFLICT, errorMessage.EXIST_EMAIL);
+    //         if (loginUser._id.toString() === user._id.toString()) {
+    //             throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
     //         }
     //
     //         next();
@@ -60,35 +93,4 @@ module.exports = {
     //         next(e);
     //     }
     // },
-
-    validateUserDinamic: (validatorsName, searchIn = 'body') => (req, res, next) => {
-        try {
-            const { error } = userValidator[validatorsName].validate(req[searchIn]);
-
-            if (error) {
-                throw new ErrorHandler(statusCodes.BAD_REQUEST, errorMessage.WRONG_EMAIL_OR_PASSWORD);
-            }
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    checkUserRoleMdlwr: (rolesArr = []) => (req, res, next) => {
-        try {
-            const { role } = req.user;
-
-            if (!rolesArr.length) {
-                return next();
-            }
-
-            if (!rolesArr.includes(role)) {
-                throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
 };

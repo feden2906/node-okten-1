@@ -7,8 +7,22 @@ const {
 } = require('../config');
 const { jwtService } = require('../service');
 const { OAuth } = require('../dataBase');
+const { userValidator } = require('../validators');
 
 module.exports = {
+    validateLoginUser: (req, res, next) => {
+        try {
+            const { error } = userValidator.loginUserValidator.validate(req.body);
+
+            if (error) {
+                throw new ErrorHandler(statusCodes.BAD_REQUEST, errorMessage.WRONG_EMAIL_OR_PASSWORD);
+            }
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
     validateToken: (tokenType = ACCESS_TOKEN_TYPE) => async (req, res, next) => {
         try {
             const token = req.get(AUTHORIZATION);
@@ -27,9 +41,25 @@ module.exports = {
 
             req.loginUser = tokenFromDB.user;
 
+            console.log(req.loginUser);
+
             next();
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    throwIfUserNotPresent: (req, res, next) => {
+        try {
+            const { user } = req;
+
+            if (!user) {
+                throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessage.WRONG_EMAIL_OR_PASSWORD);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 };

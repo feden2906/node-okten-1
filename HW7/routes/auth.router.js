@@ -4,15 +4,14 @@ const { userMiddleware, authMiddleware } = require('../middlewares');
 const { authController } = require('../controllers');
 const {
     paramName,
-    validatorsName,
     userConstants: { REFRESH_TOKEN_TYPE }
 } = require('../config');
 
 router.post(
     '/',
-    userMiddleware.validateUserDinamic(validatorsName.user.loginUser),
+    authMiddleware.validateLoginUser,
     userMiddleware.getUserByDynamicParam(paramName.user.EMAIL),
-    userMiddleware.throwIfUserNotPresent,
+    authMiddleware.throwIfUserNotPresent,
     authController.loginUser
 );
 
