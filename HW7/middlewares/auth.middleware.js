@@ -41,8 +41,6 @@ module.exports = {
 
             req.loginUser = tokenFromDB.user;
 
-            console.log(req.loginUser);
-
             next();
         } catch (e) {
             next(e);

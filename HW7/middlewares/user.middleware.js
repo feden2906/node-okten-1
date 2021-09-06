@@ -11,7 +11,6 @@ module.exports = {
 
             req.user = user;
 
-            console.log(req.user);
             next();
         } catch (e) {
             next(e);
