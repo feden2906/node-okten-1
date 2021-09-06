@@ -79,18 +79,4 @@ module.exports = {
             next(e);
         }
     },
-
-    // checkUser: (req, res, next) => {
-    //     try {
-    //         const { loginUser, user } = req;
-    //
-    //         if (loginUser._id.toString() === user._id.toString()) {
-    //             throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
-    //         }
-    //
-    //         next();
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // },
 };
