@@ -33,11 +33,10 @@ router.delete(
     authMiddleware.validateToken(),
     userMiddleware.getUserByDynamicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
     userMiddleware.throwIfUserNotPresent,
-    userMiddleware.checkUserRole([
+    userMiddleware.checkUserRoleAndID([
         ADMIN,
         USER
     ]),
-    userMiddleware.checkThisUser,
     userController.deleteUser
 );
 router.put(

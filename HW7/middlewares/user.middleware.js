@@ -59,9 +59,23 @@ module.exports = {
         }
     },
 
-    checkUserRole: (rolesArr = []) => (req, res, next) => {
+    checkThisUser: (req, res, next) => {
         try {
-            const { role } = req.loginUser;
+            const { loginUser: { _id }, params: { user_id } } = req;
+
+            if (_id.toString() !== user_id) {
+                throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkUserRoleAndID: (rolesArr = []) => (req, res, next) => {
+        try {
+            const { loginUser: { _id, role }, params: { user_id } } = req;
 
             if (!rolesArr.length) {
                 return next();
@@ -71,44 +85,12 @@ module.exports = {
                 throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
             }
 
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    checkThisUser: (req, res, next) => {
-        try {
-            const { loginUser, user } = req;
-
-            if (loginUser._id.toString() !== user._id.toString()) {
-                throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
+            if (_id.toString() === user_id) {
+                return next();
             }
-
             next();
         } catch (e) {
             next(e);
         }
     },
-
-    // checkUserRoleAndID: (rolesArr = []) => (req, res, next) => {
-    //     try {
-    //         const { loginUser, user } = req;
-    //
-    //         if (!rolesArr.length) {
-    //             return next();
-    //         }
-    //
-    //         if (!rolesArr.includes(loginUser.role)) {
-    //             throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
-    //         }
-    //
-    //         if (loginUser._id.toString() === user._id.toString() || loginUser.role === ADMIN) {
-    //             return next();
-    //         }
-    //         next();
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // },
 };
