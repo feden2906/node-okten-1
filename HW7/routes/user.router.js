@@ -6,7 +6,7 @@ const {
     dbField,
     paramName,
     searchIn,
-    userRolesEnum: { ADMIN },
+    userRolesEnum: { ADMIN, USER },
     validatorsName
 } = require('../config');
 
@@ -33,7 +33,11 @@ router.delete(
     authMiddleware.validateToken(),
     userMiddleware.getUserByDynamicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
     userMiddleware.throwIfUserNotPresent,
-    userMiddleware.checkUserRoleAndID([ADMIN]),
+    userMiddleware.checkUserRole([
+        ADMIN,
+        USER
+    ]),
+    userMiddleware.checkThisUser,
     userController.deleteUser
 );
 router.put(
@@ -42,7 +46,7 @@ router.put(
     userMiddleware.getUserByDynamicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
     userMiddleware.throwIfUserNotPresent,
     authMiddleware.validateToken(),
-    userMiddleware.checkUserRoleAndID(),
+    userMiddleware.checkThisUser,
     userController.updateUser
 );
 

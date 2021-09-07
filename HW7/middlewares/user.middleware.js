@@ -2,6 +2,7 @@ const { User } = require('../dataBase');
 const { ErrorHandler } = require('../errors');
 const { errorMessage, statusCodes } = require('../config');
 const { userValidator } = require('../validators');
+// const { ADMIN } = require('../config/user.roles.enum');
 
 module.exports = {
     getUserByDynamicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
@@ -58,24 +59,56 @@ module.exports = {
         }
     },
 
-    checkUserRoleAndID: (rolesArr = []) => (req, res, next) => {
+    checkUserRole: (rolesArr = []) => (req, res, next) => {
         try {
-            const { loginUser, user } = req;
+            const { role } = req.loginUser;
 
             if (!rolesArr.length) {
                 return next();
             }
 
-            if (!rolesArr.includes(loginUser.role)) {
+            if (!rolesArr.includes(role)) {
                 throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
             }
 
-            if (loginUser._id.toString() === user._id.toString()) {
-                return next();
-            }
             next();
         } catch (e) {
             next(e);
         }
     },
+
+    checkThisUser: (req, res, next) => {
+        try {
+            const { loginUser, user } = req;
+
+            if (loginUser._id.toString() !== user._id.toString()) {
+                throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    // checkUserRoleAndID: (rolesArr = []) => (req, res, next) => {
+    //     try {
+    //         const { loginUser, user } = req;
+    //
+    //         if (!rolesArr.length) {
+    //             return next();
+    //         }
+    //
+    //         if (!rolesArr.includes(loginUser.role)) {
+    //             throw new ErrorHandler(statusCodes.FORBIDDEN, errorMessage.FORBIDDEN);
+    //         }
+    //
+    //         if (loginUser._id.toString() === user._id.toString() || loginUser.role === ADMIN) {
+    //             return next();
+    //         }
+    //         next();
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // },
 };
