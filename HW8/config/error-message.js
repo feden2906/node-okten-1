@@ -6,6 +6,7 @@ module.exports = {
     NOT_FOUND: 'not found',
     NOT_VALID_TOKEN: 'Not valid token',
     WRONG_EMAIL_OR_PASSWORD: 'Email or password is wrong',
+    WRONG_TEMPLATE_NAME: 'Wrong template name',
     WRONG_YEAR: 'wrong year',
     USER_EXIST: 'User already exist'
 };

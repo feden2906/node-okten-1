@@ -2,6 +2,7 @@ module.exports = {
     carConstants: require('./car.constants'),
     dbTablesEnum: require('./db-tables.enum'),
     dbField: require('./dbField'),
+    emailActions: require('./email-actions.enum'),
     errorMessage: require('./error-message'),
     paramName: require('./paramName'),
     searchIn: require('./searchIn'),

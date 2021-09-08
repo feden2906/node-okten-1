@@ -1,7 +1,7 @@
 const { User } = require('../dataBase');
+const { emailActions, statusCodes } = require('../config');
+const { passwordService, emailService } = require('../service');
 const { userNormalizator } = require('../utils');
-const { passwordService } = require('../service');
-const statusCode = require('../config/status-codes');
 
 module.exports = {
     getSingleUser: (req, res, next) => {
@@ -27,14 +27,16 @@ module.exports = {
 
     createUser: async (req, res, next) => {
         try {
-            const { password } = req.body;
+            const { password, name } = req.body;
 
             const hashedPassword = await passwordService.hashPassword(password);
             const createdUser = await User.create({ ...req.body, password: hashedPassword });
 
             const userToNorm = userNormalizator.userNormalizator(createdUser);
 
-            res.status(statusCode.CREATED).json(userToNorm);
+            await emailService.sendMail('alryab4enko@gmail.com', emailActions.CREATE, { userName: name });
+
+            res.status(statusCodes.CREATED).json(userToNorm);
         } catch (e) {
             next(e);
         }
@@ -45,7 +47,7 @@ module.exports = {
             const { user_id } = req.params;
             await User.deleteOne({ _id: user_id });
 
-            res.status(statusCode.DELETED).json(`User with id ${user_id} is deleted`);
+            res.status(statusCodes.DELETED).json(`User with id ${user_id} is deleted`);
         } catch (e) {
             next(e);
         }
@@ -58,7 +60,7 @@ module.exports = {
 
             const userToNorm = userNormalizator.userNormalizator(updatedUser);
 
-            res.status(statusCode.CREATED).json(userToNorm);
+            res.status(statusCodes.CREATED).json(userToNorm);
         } catch (e) {
             next(e);
         }
