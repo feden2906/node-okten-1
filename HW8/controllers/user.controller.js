@@ -62,8 +62,7 @@ module.exports = {
                     { userName: user.name }
                 );
             }
-
-            res.status(statusCodes.DELETED).json(`User with id ${user_id} is deleted`);
+            res.sendStatus(statusCodes.DELETED);
         } catch (e) {
             next(e);
         }
