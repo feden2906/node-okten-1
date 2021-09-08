@@ -2,6 +2,7 @@ const { User } = require('../dataBase');
 const { emailActions, statusCodes } = require('../config');
 const { passwordService, emailService } = require('../service');
 const { userNormalizator } = require('../utils');
+const { USER } = require('../config/user.roles.enum');
 
 module.exports = {
     getSingleUser: (req, res, next) => {
@@ -44,8 +45,23 @@ module.exports = {
 
     deleteUser: async (req, res, next) => {
         try {
-            const { user_id } = req.params;
+            const { user, params: { user_id } } = req;
+
             await User.deleteOne({ _id: user_id });
+
+            if (user.role === USER) {
+                await emailService.sendMail(
+                    'alryab4enko@gmail.com',
+                    emailActions.DELETED_BY_USER,
+                    { userName: user.name }
+                );
+            } else {
+                await emailService.sendMail(
+                    user.email,
+                    emailActions.DELETED_BY_ADMIN,
+                    { userName: user.name }
+                );
+            }
 
             res.status(statusCodes.DELETED).json(`User with id ${user_id} is deleted`);
         } catch (e) {
