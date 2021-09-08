@@ -1,6 +1,10 @@
 const { emailActions } = require('../config');
 
 module.exports = {
+    [emailActions.AUTH]: {
+        templateName: 'auth',
+        subject: 'You logged in account'
+    },
     [emailActions.CREATE]: {
         templateName: 'create',
         subject: 'Welcome!'
@@ -12,5 +16,9 @@ module.exports = {
     [emailActions.DELETED_BY_ADMIN]: {
         templateName: 'deletedByAdmin',
         subject: 'Your account deleted by admin'
+    },
+    [emailActions.UPDATE]: {
+        templateName: 'update',
+        subject: 'Your account updated'
     }
 };

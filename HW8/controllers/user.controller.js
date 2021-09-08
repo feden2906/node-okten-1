@@ -28,14 +28,14 @@ module.exports = {
 
     createUser: async (req, res, next) => {
         try {
-            const { password, name } = req.body;
+            const { password } = req.body;
 
             const hashedPassword = await passwordService.hashPassword(password);
             const createdUser = await User.create({ ...req.body, password: hashedPassword });
 
             const userToNorm = userNormalizator.userNormalizator(createdUser);
 
-            await emailService.sendMail('alryab4enko@gmail.com', emailActions.CREATE, { userName: name });
+            await emailService.sendMail(userToNorm.email, emailActions.CREATE, { userName: userToNorm.name });
 
             res.status(statusCodes.CREATED).json(userToNorm);
         } catch (e) {
@@ -51,7 +51,7 @@ module.exports = {
 
             if (user.role === USER) {
                 await emailService.sendMail(
-                    'alryab4enko@gmail.com',
+                    user.email,
                     emailActions.DELETED_BY_USER,
                     { userName: user.name }
                 );
@@ -75,6 +75,12 @@ module.exports = {
             const updatedUser = await User.findByIdAndUpdate(user_id, req.body);
 
             const userToNorm = userNormalizator.userNormalizator(updatedUser);
+
+            await emailService.sendMail(
+                userToNorm.email,
+                emailActions.UPDATE,
+                { userName: userToNorm.name }
+            );
 
             res.status(statusCodes.CREATED).json(userToNorm);
         } catch (e) {

@@ -1,6 +1,6 @@
 const { OAuth } = require('../dataBase');
-const { statusCodes, userConstants: { AUTHORIZATION } } = require('../config');
-const { passwordService, jwtService } = require('../service');
+const { statusCodes, userConstants: { AUTHORIZATION }, emailActions } = require('../config');
+const { passwordService, jwtService, emailService } = require('../service');
 const { userNormalizator } = require('../utils');
 
 module.exports = {
@@ -15,6 +15,12 @@ module.exports = {
             await OAuth.create({ ...tokenPair, user: user._id });
 
             const userToNorm = userNormalizator.userNormalizator(user);
+
+            await emailService.sendMail(
+                userToNorm.email,
+                emailActions.AUTH,
+                { userName: userToNorm.name }
+            );
 
             res.json({
                 ...tokenPair,
