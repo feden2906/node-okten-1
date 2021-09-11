@@ -3,7 +3,8 @@ const {
     statusCodes,
     userConstants: { AUTHORIZATION },
     emailActions,
-    actionTokenEnum: { FORGOT_PASS }
+    actionTokenEnum: { FORGOT_PASS },
+    variables: { FRONTEND_URL }
 } = require('../config');
 const { passwordService, jwtService, emailService } = require('../service');
 const { userNormalizator } = require('../utils');
@@ -77,6 +78,12 @@ module.exports = {
             const action_token = jwtService.generateActionToken(FORGOT_PASS);
 
             await ActionToken.create({ token: action_token, user: user._id });
+
+            await emailService.sendMail(
+                'alryab4enko@gmail.com',
+                emailActions.FORGOT_PASSWORD,
+                { userName: user.name, forgotPasswordURL: `${FRONTEND_URL}/password?token=${action_token}` }
+            );
 
             res.json('ok');
         } catch (e) {
