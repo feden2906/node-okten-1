@@ -1,4 +1,5 @@
 module.exports = {
+    actionTokenEnum: require('./action_token.enum'),
     carConstants: require('./car.constants'),
     dbTablesEnum: require('./db-tables.enum'),
     dbField: require('./dbField'),

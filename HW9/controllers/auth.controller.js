@@ -1,5 +1,10 @@
-const { OAuth } = require('../dataBase');
-const { statusCodes, userConstants: { AUTHORIZATION }, emailActions } = require('../config');
+const { ActionToken, OAuth } = require('../dataBase');
+const {
+    statusCodes,
+    userConstants: { AUTHORIZATION },
+    emailActions,
+    actionTokenEnum: { FORGOT_PASS }
+} = require('../config');
 const { passwordService, jwtService, emailService } = require('../service');
 const { userNormalizator } = require('../utils');
 
@@ -64,5 +69,19 @@ module.exports = {
             next(e);
         }
     },
+
+    sendEmailForgotPassword: async (req, res, next) => {
+        try {
+            const user = req;
+
+            const action_token = jwtService.generateActionToken(FORGOT_PASS);
+
+            await ActionToken.create({ token: action_token, user: user._id });
+
+            res.json('ok');
+        } catch (e) {
+            next(e);
+        }
+    }
 
 };

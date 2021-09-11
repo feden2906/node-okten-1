@@ -27,4 +27,11 @@ router.post(
     authController.refresh
 );
 
+router.post(
+    '/password/forgot/send',
+    userMiddleware.getUserByDynamicParam(paramName.user.EMAIL),
+    userMiddleware.throwIfUserNotPresent,
+    authController.sendEmailForgotPassword
+);
+
 module.exports = router;
