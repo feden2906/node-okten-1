@@ -73,7 +73,7 @@ module.exports = {
 
     sendEmailForgotPassword: async (req, res, next) => {
         try {
-            const user = req;
+            const { user } = req;
 
             const action_token = jwtService.generateActionToken(FORGOT_PASS);
 

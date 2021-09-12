@@ -17,12 +17,12 @@ module.exports = {
         templateName: 'deletedByAdmin',
         subject: 'Your account deleted by admin'
     },
-    [emailActions.UPDATE]: {
-        templateName: 'update',
-        subject: 'Your account updated'
-    },
     [emailActions.FORGOT_PASSWORD]: {
         templateName: 'forgot_password',
         subject: 'Forgot your password?'
+    },
+    [emailActions.UPDATE]: {
+        templateName: 'update',
+        subject: 'Your account updated'
     }
 };
