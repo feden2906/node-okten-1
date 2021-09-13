@@ -1,6 +1,5 @@
 const { ErrorHandler } = require('../errors');
 const {
-    dbTablesEnum: { USER },
     errorMessage,
     statusCodes,
     userConstants: { ACCESS_TOKEN_TYPE, AUTHORIZATION }
@@ -33,7 +32,7 @@ module.exports = {
 
             await jwtService.verifyToken(token, tokenType);
 
-            const tokenFromDB = await OAuth.findOne({ [tokenType]: token }).populate(USER);
+            const tokenFromDB = await OAuth.findOne({ [tokenType]: token });
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessage.NOT_VALID_TOKEN);
@@ -71,7 +70,7 @@ module.exports = {
 
             await jwtService.verifyActionToken(action_token, tokenType);
 
-            const tokenFromDB = await ActionToken.findOne({ token: action_token }).populate(USER);
+            const tokenFromDB = await ActionToken.findOne({ token: action_token });
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessage.NOT_VALID_TOKEN);

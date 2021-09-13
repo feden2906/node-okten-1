@@ -22,11 +22,11 @@ module.exports = {
 
             const userToNorm = userNormalizator.userNormalizator(user);
 
-            await emailService.sendMail(
-                userToNorm.email,
-                emailActions.AUTH,
-                { userName: userToNorm.name }
-            );
+            // await emailService.sendMail(
+            //     userToNorm.email,
+            //     emailActions.AUTH,
+            //     { userName: userToNorm.name }
+            // );
 
             res.json({
                 ...tokenPair,
