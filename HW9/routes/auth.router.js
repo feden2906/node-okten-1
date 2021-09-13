@@ -4,7 +4,9 @@ const { userMiddleware, authMiddleware } = require('../middlewares');
 const { authController } = require('../controllers');
 const {
     paramName,
-    userConstants: { REFRESH_TOKEN_TYPE }
+    userConstants: { REFRESH_TOKEN_TYPE },
+    actionTokenEnum,
+    validatorsName
 } = require('../config');
 
 router.post(
@@ -30,15 +32,15 @@ router.post(
 router.post(
     '/password/forgot/send',
     userMiddleware.getUserByDynamicParam(paramName.user.EMAIL),
-    userMiddleware.throwIfUserNotPresent,
+    authMiddleware.throwIfUserNotPresent,
     authController.sendEmailForgotPassword
 );
 
 router.post(
     '/password/forgot/set',
-    userMiddleware.getUserByDynamicParam(paramName.user.EMAIL),
-    userMiddleware.throwIfUserNotPresent,
-    authController.sendEmailForgotPassword
+    userMiddleware.validateUserDinamic(validatorsName.user.passwordValiator),
+    authMiddleware.validateActionToken(actionTokenEnum.FORGOT_PASS),
+    authController.setNewForgotPassword
 );
 
 module.exports = router;

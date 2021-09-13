@@ -1,4 +1,4 @@
-const { ActionToken, OAuth } = require('../dataBase');
+const { ActionToken, OAuth, User } = require('../dataBase');
 const {
     statusCodes,
     userConstants: { AUTHORIZATION },
@@ -89,6 +89,27 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
 
+    setNewForgotPassword: async (req, res, next) => {
+        try {
+            const {
+                loginUser: { _id },
+                body: { password }
+            } = req;
+            const action_token = req.get(AUTHORIZATION);
+
+            const hashPassword = await passwordService.hashPassword(password);
+
+            await User.findByIdAndUpdate(_id, { password: hashPassword });
+
+            await ActionToken.deleteOne({ action_token });
+
+            await OAuth.deleteMany({ user: _id });
+
+            res.json('ok');
+        } catch (e) {
+            next(e);
+        }
+    }
 };

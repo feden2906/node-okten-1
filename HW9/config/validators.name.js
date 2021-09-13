@@ -6,6 +6,7 @@ module.exports = {
     user: {
         createUser: 'createUserValidator',
         updateUser: 'updateUserValidator',
-        loginUser: 'loginUserValidator'
+        loginUser: 'loginUserValidator',
+        passwordValiator: 'passwordValidator'
     }
 };

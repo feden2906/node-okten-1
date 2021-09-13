@@ -6,7 +6,7 @@ const {
     userConstants: { ACCESS_TOKEN_TYPE, AUTHORIZATION }
 } = require('../config');
 const { jwtService } = require('../service');
-const { OAuth } = require('../dataBase');
+const { ActionToken, OAuth } = require('../dataBase');
 const { userValidator } = require('../validators');
 
 module.exports = {
@@ -54,6 +54,30 @@ module.exports = {
             if (!user) {
                 throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessage.WRONG_EMAIL_OR_PASSWORD);
             }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    validateActionToken: (tokenType) => async (req, res, next) => {
+        try {
+            const action_token = req.get(AUTHORIZATION);
+
+            if (!action_token) {
+                throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessage.NO_TOKEN);
+            }
+
+            await jwtService.verifyActionToken(action_token, tokenType);
+
+            const tokenFromDB = await ActionToken.findOne({ token: action_token }).populate(USER);
+
+            if (!tokenFromDB) {
+                throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessage.NOT_VALID_TOKEN);
+            }
+
+            req.loginUser = tokenFromDB.user;
 
             next();
         } catch (e) {
