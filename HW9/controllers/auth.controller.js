@@ -22,11 +22,11 @@ module.exports = {
 
             const userToNorm = userNormalizator.userNormalizator(user);
 
-            // await emailService.sendMail(
-            //     userToNorm.email,
-            //     emailActions.AUTH,
-            //     { userName: userToNorm.name }
-            // );
+            await emailService.sendMail(
+                userToNorm.email,
+                emailActions.AUTH,
+                { userName: userToNorm.name }
+            );
 
             res.json({
                 ...tokenPair,
@@ -80,7 +80,7 @@ module.exports = {
             await ActionToken.create({ token: action_token, user: user._id });
 
             await emailService.sendMail(
-                'alryab4enko@gmail.com',
+                user.email,
                 emailActions.FORGOT_PASSWORD,
                 { userName: user.name, forgotPasswordURL: `${FRONTEND_URL}/password?token=${action_token}` }
             );
