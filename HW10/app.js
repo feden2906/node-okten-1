@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const expressFileUpload = require('express-fileupload');
 
 require('dotenv').config();
 
@@ -12,6 +13,7 @@ mongoose.connect(DB_CONNECTION_URL);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(expressFileUpload());
 
 app.get('/ping', (req, res) => res.json('Pong'));
 

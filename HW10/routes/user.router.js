@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { userController } = require('../controllers');
-const { userMiddleware, authMiddleware } = require('../middlewares');
+const { userMiddleware, authMiddleware, fileMiddleware } = require('../middlewares');
 const {
     dbField,
     paramName,
@@ -17,6 +17,7 @@ router.get(
 router.post(
     '/',
     userMiddleware.validateUserDinamic(validatorsName.user.createUser),
+    fileMiddleware.checkAvatar,
     userMiddleware.getUserByDynamicParam(paramName.user.EMAIL),
     userMiddleware.throwIfUserPresent,
     userController.createUser
