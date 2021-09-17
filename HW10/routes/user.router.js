@@ -43,6 +43,7 @@ router.delete(
 router.put(
     '/:user_id',
     userMiddleware.validateUserDinamic(validatorsName.user.updateUser),
+    fileMiddleware.checkAvatar,
     userMiddleware.getUserByDynamicParam(paramName.user.USER_ID, searchIn.PARAMS, dbField._ID),
     userMiddleware.throwIfUserNotPresent,
     authMiddleware.validateToken(),

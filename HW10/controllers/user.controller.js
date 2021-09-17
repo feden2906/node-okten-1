@@ -1,5 +1,5 @@
 const { User } = require('../dataBase');
-const { emailActions, statusCodes } = require('../config');
+const { emailActions, statusCodes, userConstants: { USERS } } = require('../config');
 const { passwordService, emailService, s3Service } = require('../service');
 const { userNormalizator } = require('../utils');
 const { USER } = require('../config/user.roles.enum');
@@ -34,7 +34,7 @@ module.exports = {
             let createdUser = await User.create({ ...req.body, password: hashedPassword });
 
             if (req.files && req.files.avatar) {
-                const s3Response = await s3Service.uploadFile(req.files.avatar, 'users', createdUser._id);
+                const s3Response = await s3Service.uploadFile(req.files.avatar, USERS, createdUser._id);
 
                 createdUser = await User.findByIdAndUpdate(
                     createdUser._id,
@@ -61,6 +61,10 @@ module.exports = {
         try {
             const { user, params: { user_id } } = req;
 
+            if (user.avatar) {
+                await s3Service.deleteFile(user.avatar);
+            }
+
             await User.deleteOne({ _id: user_id });
 
             if (user.role === USER) {
@@ -84,8 +88,22 @@ module.exports = {
 
     updateUser: async (req, res, next) => {
         try {
-            const { user_id } = req.params;
-            const updatedUser = await User.findByIdAndUpdate(user_id, req.body);
+            const { user, params: { user_id } } = req;
+            let updatedUser = await User.findByIdAndUpdate(user_id, req.body);
+
+            if (req.files && req.files.avatar) {
+                if (user.avatar) {
+                    await s3Service.deleteFile(user.avatar);
+                }
+
+                const s3Response = await s3Service.uploadFile(req.files.avatar, USERS, updatedUser._id);
+
+                updatedUser = await User.findByIdAndUpdate(
+                    updatedUser._id,
+                    { avatar: s3Response.Location },
+                    { new: true }
+                );
+            }
 
             const userToNorm = userNormalizator.userNormalizator(updatedUser);
 
